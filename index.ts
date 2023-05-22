@@ -58,12 +58,12 @@ interface DarkWSInterceptorMap {
 
 type DarkWSInterceptors = { [K in keyof DarkWSInterceptorMap]: DarkWSInterceptorMap[K][] };
 
-interface BroadcastMessage {
+export interface BroadcastMessage {
     key: string;
     data: any;
 }
 
-interface ErrorMessage {
+export interface ErrorMessage {
     code: string;
     message: string;
 }
@@ -85,7 +85,7 @@ export interface DarkWSPromise<T> {
     catch: (handler: (error: ErrorMessage) => any) => DarkWSPromise<T>;
 }
 
-export class DarkWS {
+class DarkWS {
     private readonly options: DarkWSOptions;
     private socket: WebSocket | null = null;
     private requests: Record<string, { resolve: (value: any) => void, reject: (reason?: any) => void }> = {};
@@ -264,3 +264,5 @@ export class DarkWS {
         }
     }
 }
+
+export const connect = (options: Partial<DarkWSOptions> = {}) => new DarkWS(options);
