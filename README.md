@@ -10,14 +10,14 @@ npm i darkws
 
 ### Usage
 ```ts
-import {connect} from 'darkws';
+import {DarkWS} from 'darkws';
 
-const config = {
+const options = {
     host: 'localhost',
     path: '/ws/',
     ...
 };
-const ws = connect(config);
+const ws = new DarkWS(options);
 
 // Make request
 ws.request<string>('foo:bar', {foo: 'bar'}).then((response) => {

@@ -1,8 +1,5 @@
 // JSON types
 type JsonPrimitive = string | number | boolean | null;
-type JsonArray = JsonValue[] | readonly JsonValue[];
-type JsonObject = { [K in string]: JsonValue } & { [K in string]?: JsonValue | undefined };
-type JsonValue = JsonPrimitive | JsonArray | JsonObject;
 type JsonifiableObject = { [K in string]?: Jsonifiable } | { toJSON: () => Jsonifiable };
 type JsonifiableArray = readonly Jsonifiable[];
 type Jsonifiable = JsonPrimitive | JsonifiableObject | JsonifiableArray;
@@ -47,7 +44,7 @@ export interface DarkWSOptions {
     debug: boolean;
 }
 
-interface DarkWSInterceptorMap {
+export interface DarkWSInterceptorMap {
     open: (event: Event) => void;
     close: (event: CloseEvent) => void;
     error: (event: Event) => void;
@@ -85,7 +82,7 @@ export interface DarkWSPromise<T> {
     catch: (handler: (error: ErrorMessage) => any) => DarkWSPromise<T>;
 }
 
-class DarkWS {
+export class DarkWS {
     private readonly options: DarkWSOptions;
     private socket: WebSocket | null = null;
     private requests: Record<string, { resolve: (value: any) => void, reject: (reason?: any) => void }> = {};
@@ -253,7 +250,10 @@ class DarkWS {
     public intercept<K extends keyof DarkWSInterceptorMap, T extends DarkWSInterceptorMap[K]>(event: K, handler: T) {
         const group = this.interceptors[event];
         group.push(handler);
-        return () => group.splice(group.indexOf(handler), 1);
+
+        return () => {
+            group.splice(group.indexOf(handler), 1);
+        };
     }
 
     private callInterceptors<K extends keyof DarkWSInterceptorMap, T extends DarkWSInterceptorMap[K]>(event: K, ...args: Parameters<T>) {
@@ -264,5 +264,3 @@ class DarkWS {
         }
     }
 }
-
-export const connect = (options: Partial<DarkWSOptions> = {}) => new DarkWS(options);
