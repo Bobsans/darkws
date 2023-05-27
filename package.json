@@ -25,7 +25,7 @@
     "scripts": {
         "clean": "rimraf -rf lib",
         "build": "npm run clean && npm run build:esm && npm run build:cjs",
-        "build:esm": "tsc -p config/tsconfig.esm.json && node -e \\\"require('fs').rename('lib/esm/index.js','lib/esm/index.mjs',()=>{})\\\"",
+        "build:esm": "tsc -p config/tsconfig.esm.json && node -e \"require('fs').rename('lib/esm/index.js','lib/esm/index.mjs',()=>{})\"",
         "build:cjs": "tsc -p config/tsconfig.cjs.json",
         "semantic-release": "semantic-release",
         "prepack": "npm run build"
