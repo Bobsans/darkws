@@ -8,17 +8,50 @@
         "type": "git",
         "url": "git+https://github.com/Bobsans/darkws.git"
     },
-    "main": "index.js",
-    "types": "index.d.ts",
+    "exports": {
+        ".": {
+            "import": {
+                "default": "./lib/esm/index.js",
+                "types": "./lib/esm/types/index.d.ts"
+            },
+            "require": {
+                "default": "./lib/cjs/index.js",
+                "types": "./lib/esm/types/index.d.ts"
+            }
+        }
+    },
+    "main": "./lib/cjs/index.js",
+    "types": "./lib/cjs/types/index.d.ts",
     "scripts": {
-        "prepublish": "tsc"
+        "clean": "rimraf -rf lib",
+        "build": "npm run clean && npm run build:esm && npm run build:cjs",
+        "build:esm": "tsc -p config/tsconfig.esm.json && node -e \\\"require('fs').rename('lib/esm/index.js','lib/esm/index.mjs',()=>{})\\\"",
+        "build:cjs": "tsc -p config/tsconfig.cjs.json",
+        "semantic-release": "semantic-release",
+        "prepack": "npm run build"
     },
     "devDependencies": {
+        "rimraf": "^5.0.0",
+        "semantic-release": "^21.0.0",
         "typescript": "^5.0.0"
     },
     "files": [
-        "index.js",
-        "index.d.ts",
-        "README.md"
+        "lib/**/*"
+    ],
+    "release": {
+        "branches": [
+            "main"
+        ]
+    },
+    "keywords": [
+        "npm",
+        "typescript",
+        "javascript",
+        "cjs",
+        "esm",
+        "nodejs",
+        "commonjs",
+        "ecmascript",
+        "websocket"
     ]
 }

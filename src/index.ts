@@ -1,9 +1,3 @@
-// JSON types
-type JsonPrimitive = string | number | boolean | null;
-type JsonifiableObject = { [K in string]?: Jsonifiable } | { toJSON: () => Jsonifiable };
-type JsonifiableArray = readonly Jsonifiable[];
-type Jsonifiable = JsonPrimitive | JsonifiableObject | JsonifiableArray;
-
 // DarkWS
 export interface DarkWSOptions {
     /**
@@ -208,7 +202,7 @@ export class DarkWS {
      * Send custom data to the server
      * @param data Any JSON-serializable data
      */
-    public send(data: Jsonifiable) {
+    public send(data: any) {
         return this._send(`@|${JSON.stringify(data)}`);
     }
 
@@ -217,7 +211,7 @@ export class DarkWS {
      * @param action Action to handle
      * @param data Any JSON-serializable data
      */
-    public request<T>(action: string, data?: Jsonifiable): DarkWSPromise<T> {
+    public request<T>(action: string, data?: any): DarkWSPromise<T> {
         return new Promise((resolve, reject) => {
             const key = this.generateKey();
             return this._send(`${key}|${action}${data !== undefined ? `|${JSON.stringify(data)}` : ''}`).then(() => {
