@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "lib": ["ESNext", "DOM"],
         "strict": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
@@ -11,6 +12,6 @@
         "allowSyntheticDefaultImports": true
     },
     "files": [
-        "../src/index.ts"
+        "./src/index.ts"
     ]
 }
